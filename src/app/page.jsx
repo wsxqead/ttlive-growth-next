@@ -1,5 +1,6 @@
 "use client";
 
+import AttendanceCard from "@/components/AttendanceCard";
 import ProgressBar from "../components/ProgressBar";
 import ActiveTitle from "../components/ActiveTitle";
 import { demoActivity, demoProfile, demoQuests } from "../data/sample";
@@ -116,6 +117,9 @@ export default function Page() {
             </div>
           )}
         </div>
+      </div>
+      <div className="mt-5 md:mt-6">
+        <AttendanceCard />
       </div>
     </section>
   );
