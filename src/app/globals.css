@@ -18,6 +18,11 @@
     0 4px 10px rgba(0, 0, 0, 0.06);
 }
 
+html {
+  /* 스크롤 유무와 관계없이 폭을 고정 */
+  scrollbar-gutter: stable both-edges;
+}
+
 html,
 body,
 :root {
@@ -125,4 +130,9 @@ body {
 /* 보조 텍스트 색상 (컴포넌트 내부에서 쓸 수 있게) */
 .text-muted {
   color: var(--muted);
+}
+
+/* 한국어 단어가 중간에서 끊기는 것 방지 */
+.break-keep {
+  word-break: keep-all;
 }

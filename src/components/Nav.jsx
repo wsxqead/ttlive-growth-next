@@ -11,6 +11,7 @@ import { usePathname } from "next/navigation";
  */
 const links = [
   { href: "/", label: "프로필 & 요약" },
+  { href: "/titles/preview", label: "칭호 미리보기" },
   { group: "등급" },
   { href: "/fan-lv", label: "Fan Lv (후원)" },
   { href: "/activity", label: "Activity Grade (활동)" },
