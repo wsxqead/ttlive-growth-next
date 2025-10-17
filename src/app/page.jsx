@@ -6,7 +6,7 @@ import ActiveTitle from "../components/ActiveTitle";
 import { demoActivity, demoProfile, demoQuests } from "../data/sample";
 // 상단 import
 import RadarHex from "../components/RadarHex";
-import { computeStatScores } from "../lib/stats";
+import { computeStatScores } from "../../lib/stats";
 /* 진행 요약 계산 */
 function summarize(list = []) {
   let completed = 0,
