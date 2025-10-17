@@ -96,8 +96,8 @@ export default function RadarHex({
             })}
             <polygon
               points={polyPoints}
-              fill="rgba(67,209,191,.28)"
-              stroke="rgba(67,209,191,.75)"
+              fill="rgba(255, 221, 77, 0.3)"
+              stroke="rgba(255, 208, 0, 0.9)"
               strokeWidth="2"
             />
           </svg>
@@ -115,7 +115,7 @@ export default function RadarHex({
             <div className="text-xs text-muted mb-1">총합 등급</div>
             <div
               className="leading-none"
-              style={{ fontSize: 48, fontWeight: 800, color: "#166e64" }}
+              style={{ fontSize: 48, fontWeight: 800, color: "#e6d38a" }}
             >
               {overallGrade}
             </div>

@@ -12,7 +12,7 @@ export default function PersonalSigCard({
   repScore = 82,
 }) {
   const inputRef = useRef(null);
-  const [mode, setMode] = useState("sig"); // "sig" 또는 "profile"
+  const [mode, setMode] = useState("sig");
   const [sigPreview, setSigPreview] = useState(sigUrl);
   const [profilePreview, setProfilePreview] = useState(profileUrl);
 
@@ -33,7 +33,7 @@ export default function PersonalSigCard({
       const url = String(reader.result);
       if (mode === "sig") setSigPreview(url);
       else setProfilePreview(url);
-      if (onChange) onChange(file, url, mode); // 현재 모드도 함께 전달
+      if (onChange) onChange(file, url, mode);
     };
     reader.readAsDataURL(file);
   }
@@ -44,7 +44,10 @@ export default function PersonalSigCard({
         {/* 시그 / 프로필 토글 */}
         <div
           className="rounded-full border p-1 flex gap-1"
-          style={{ borderColor: "var(--line2)", background: "var(--surface)" }}
+          style={{
+            borderColor: "#e6d38a",
+            background: "rgba(255,255,255,0.8)",
+          }}
         >
           {["sig", "profile"].map((m) => {
             const active = mode === m;
@@ -54,10 +57,10 @@ export default function PersonalSigCard({
                 onClick={() => setMode(m)}
                 className="px-3 py-1.5 rounded-full text-sm font-medium transition-all"
                 style={{
-                  background: active ? "var(--brand-soft)" : "transparent",
-                  color: active ? "#166e64" : "var(--txt)",
+                  background: active ? "#fff7d6" : "transparent",
+                  color: active ? "#b8860b" : "var(--txt)",
                   border: active
-                    ? "1px solid var(--line2)"
+                    ? "1px solid #e6d38a"
                     : "1px solid transparent",
                 }}
               >
@@ -72,14 +75,14 @@ export default function PersonalSigCard({
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 items-center w-full">
         {/* ① 이미지 카드 */}
         <div
-          className="relative rounded-2xl overflow-hidden mx-auto group" // ← group 추가
+          className="relative rounded-2xl overflow-hidden mx-auto group"
           style={{
             width: requiredSize,
             height: requiredSize,
             boxShadow:
-              "0 10px 30px rgba(0,0,0,.08), inset 0 0 0 1px var(--line2), 0 0 0 6px rgba(67,209,191,.10)",
+              "0 10px 30px rgba(0,0,0,.08), inset 0 0 0 1px #e6d38a, 0 0 0 6px rgba(255,221,77,.10)",
             background:
-              "radial-gradient(120% 120% at 50% 0%, rgba(67,209,191,.10), transparent 55%)",
+              "radial-gradient(120% 120% at 50% 0%, rgba(255,236,150,.18), transparent 55%)",
           }}
         >
           <img
@@ -88,16 +91,16 @@ export default function PersonalSigCard({
             className="w-full h-full object-cover"
           />
 
-          {/* 상단 라벨 */}
+          {/* 상단 라벨 (hover 시 노출) */}
           <div className="absolute top-2 left-2">
             <span
               className="px-2.5 py-1 rounded-full text-xs font-semibold opacity-0 pointer-events-none transition
                  group-hover:opacity-100 group-hover:pointer-events-auto"
               style={{
-                background: "rgba(255,255,255,.85)",
-                border: "1px solid var(--line2)",
+                background: "rgba(255,255,240,.85)",
+                border: "1px solid #e6d38a",
                 backdropFilter: "blur(2px)",
-                color: "#166e64",
+                color: "#b8860b",
               }}
             >
               {mode === "sig" ? "Signature" : "Profile"}
@@ -111,9 +114,9 @@ export default function PersonalSigCard({
                opacity-0 pointer-events-none transition
                group-hover:opacity-100 group-hover:pointer-events-auto"
             style={{
-              background: "rgba(0,0,0,.4)",
-              color: "#fff",
-              border: "1px solid rgba(255,255,255,.3)",
+              background: "rgba(0,0,0,.45)",
+              color: "#fffbea",
+              border: "1px solid rgba(255,221,77,.4)",
             }}
           >
             이미지 변경
@@ -131,40 +134,34 @@ export default function PersonalSigCard({
         {/* ② 평판 지수 */}
         <div
           className="rounded-2xl border p-4 md:p-5 flex items-center justify-between gap-4"
-          style={{ borderColor: "var(--line2)", background: "var(--surface)" }}
+          style={{
+            borderColor: "#e6d38a",
+            background: "#fffdf6",
+            boxShadow: "0 4px 10px rgba(255,223,128,0.08)",
+          }}
         >
           <div className="min-w-0">
             <div className="text-sm text-muted">평판 지수</div>
             <div className="mt-1 flex items-end gap-2">
               <span
                 className="leading-none font-extrabold"
-                style={{ fontSize: 40, color: "#166e64" }}
+                style={{ fontSize: 40, color: "#b8860b" }}
               >
                 {Math.round(repScore)}
               </span>
               <span className="text-xs text-muted mb-[3px]">/ 100</span>
             </div>
           </div>
-
-          <div
-            className="shrink-0 px-3 py-1.5 rounded-full font-semibold"
-            style={{
-              background: "var(--brand-soft)",
-              color: "#166e64",
-              border: "1px solid var(--line2)",
-            }}
-          >
-            상위 {percentile}%
-          </div>
         </div>
 
-        {/* ③ 한줄 평 */}
+      <div>
+          {/* ③ 한줄 평 */}
         <div
           className="rounded-2xl border p-5 flex flex-col items-center justify-center text-center"
           style={{
-            borderColor: "var(--line2)",
-            background: "linear-gradient(135deg, #e8fefb 0%, #f9fffd 100%)",
-            boxShadow: "0 4px 12px rgba(0,0,0,0.05)",
+            borderColor: "#e6d38a",
+            background: "linear-gradient(135deg, #fffbe6 0%, #fffef8 100%)",
+            boxShadow: "0 4px 12px rgba(255,223,128,0.15)",
           }}
         >
           <div className="text-sm text-muted mb-2">한줄 평</div>
@@ -172,7 +169,7 @@ export default function PersonalSigCard({
             className="font-bold leading-snug"
             style={{
               fontSize: 22,
-              color: "#0d6157",
+              color: "#a07800",
               lineHeight: 1.3,
               wordBreak: "keep-all",
             }}
@@ -181,6 +178,7 @@ export default function PersonalSigCard({
             {tagline}
           </div>
         </div>
+      </div>
       </div>
     </div>
   );

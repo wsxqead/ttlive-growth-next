@@ -7,6 +7,7 @@ import { demoActivity, demoProfile, demoQuests } from "../data/sample";
 import RadarHex from "../components/RadarHex";
 import PersonalSigCard from "../components/PersonalSigCard";
 import { computeStatScores } from "../../lib/stats";
+
 /* 진행 요약 계산 */
 function summarize(list = []) {
   let completed = 0,
@@ -54,10 +55,21 @@ export default function Page() {
   ].slice(0, 3);
 
   return (
-    <section className="panel">
-      {/* 헤더: 좌측 타이틀 / 우측 대표 칭호 */}
+    <section
+      className="panel"
+      style={{
+        background: "linear-gradient(180deg, #fffdf6 0%, #fffbe6 100%)",
+        borderColor: "#e6d38a",
+      }}
+    >
+      {/* 헤더 */}
       <div className="flex items-center justify-between gap-3 mb-4 md:mb-6">
-        <h1 className="text-lg">프로필 & 요약</h1>
+        <h1
+          className="text-lg font-bold"
+          style={{ color: "#a07800", letterSpacing: "-0.02em" }}
+        >
+          프로필 & 요약
+        </h1>
         <div className="flex items-center gap-2">
           <span className="text-sm text-muted hidden sm:inline">대표 칭호</span>
           <ActiveTitle
@@ -66,22 +78,15 @@ export default function Page() {
           />
         </div>
       </div>
-      {/* 패널들 사이 간격 넉넉히 */}
+
+      {/* 본문 */}
       <div className="grid grid-cols-1 gap-5 md:gap-6">
-        <PersonalSigCard
-          value="https://static.flextv.co.kr/vipsignature/202510/92ae0915e4a0d4a2.webp" // 있으면 초기값, 없으면 "" (optional)
-          onChange={(file, dataUrl) => {
-            // TODO: 업로드 API 연동
-            // 1) dataUrl을 미리보기로 쓰고
-            // 2) file을 서버에 업로드 → 저장된 URL을 사용자 프로필에 기록
-            console.log("personal-sig change:", { file, dataUrl });
-            alert("시그 이미지가 변경되었습니다. (API 연동 예정)");
-          }}
-        />
+        <PersonalSigCard />
+
         <div>
           <div className="grid md:grid-cols-[380px_1fr] gap-6 items-start">
+            {/* 좌측: 스탯 레이더 */}
             <div>
-              {/* 스탯 레이더 섹션 */}
               <RadarHex
                 values={computeStatScores({
                   weeklyBroadcasts: 4,
@@ -102,28 +107,62 @@ export default function Page() {
                 title="내 활동 스탯"
               />
             </div>
+
+            {/* 우측: 진행도/요약 */}
             <div className="flex flex-col flex-1 gap-5 md:gap-6 w-full">
               {/* EXP 진행도 */}
-              <div className="panel">
+              <div
+                className="panel"
+                style={{
+                  borderColor: "#e6d38a",
+                  background: "#fffdf6",
+                }}
+              >
                 <div className="space-y-3 md:space-y-4">
-                  <h3>Activity EXP 진행도</h3>
+                  <h3 className="font-semibold" style={{ color: "#a07800" }}>
+                    Activity EXP 진행도
+                  </h3>
                   <div className="item">
                     <div className="flex items-center gap-2">
-                      <span className="badge">Grade {demoActivity.grade}</span>
+                      <span
+                        className="badge"
+                        style={{
+                          background: "#fff7d6",
+                          borderColor: "#e6d38a",
+                          color: "#b8860b",
+                        }}
+                      >
+                        Grade {demoActivity.grade}
+                      </span>
                     </div>
-                    <span className="tag">
+                    <span
+                      className="tag"
+                      style={{ color: "#8f7400", background: "#fffbe6" }}
+                    >
                       {demoActivity.exp.toLocaleString()} /{" "}
                       {demoActivity.nextExp.toLocaleString()} EXP
                     </span>
                   </div>
-                  <ProgressBar value={pct} />
+                  <ProgressBar
+                    value={pct}
+                    color="#b8860b"
+                    background="#fff2b8"
+                  />
                 </div>
               </div>
 
               {/* 퀘스트 요약 */}
-              <div className="panel">
+              <div
+                className="panel"
+                style={{
+                  borderColor: "#e6d38a",
+                  background: "#fffef8",
+                }}
+              >
                 <div className="space-y-3 md:space-y-4">
-                  <h3>퀘스트 요약</h3>
+                  <h3 className="font-semibold" style={{ color: "#a07800" }}>
+                    퀘스트 요약
+                  </h3>
                   <div className="grid grid-cols-1 lg:grid-cols-3 gap-3 md:gap-4">
                     <StatusCard label="오늘(일일)" s={daily} />
                     <StatusCard label="이번주(주간)" s={weekly} />
@@ -133,20 +172,54 @@ export default function Page() {
               </div>
 
               {/* 임박 섹션 */}
-              <div className="panel">
+              <div
+                className="panel"
+                style={{
+                  borderColor: "#e6d38a",
+                  background: "#fffef8",
+                }}
+              >
                 <div className="space-y-3 md:space-y-4">
-                  <h3>지금 완료 가능(임박)</h3>
+                  <h3 className="font-semibold" style={{ color: "#a07800" }}>
+                    지금 완료 가능(임박)
+                  </h3>
                   {topNear.length === 0 ? (
                     <div className="text-muted">임박한 퀘스트가 없습니다.</div>
                   ) : (
                     <div className="grid gap-2 md:gap-3">
                       {topNear.map((q) => (
-                        <div key={q.id} className="item">
+                        <div
+                          key={q.id}
+                          className="item rounded-xl p-3 border"
+                          style={{
+                            borderColor: "#e6d38a",
+                            background: "#fffef3",
+                          }}
+                        >
                           <div className="flex items-center gap-2 flex-wrap min-w-0">
-                            <strong className="truncate">{q.name}</strong>
-                            <span className="tag shrink-0">{q.pct}%</span>
+                            <strong
+                              className="truncate"
+                              style={{ color: "#8b7500" }}
+                            >
+                              {q.name}
+                            </strong>
+                            <span
+                              className="tag shrink-0"
+                              style={{
+                                background: "#fff7d6",
+                                color: "#b8860b",
+                              }}
+                            >
+                              {q.pct}%
+                            </span>
                           </div>
-                          <span className="badge shrink-0">
+                          <span
+                            className="badge shrink-0"
+                            style={{
+                              background: "#fffbe6",
+                              color: "#b8860b",
+                            }}
+                          >
                             +{q.rewardExp} EXP
                           </span>
                         </div>
@@ -155,6 +228,7 @@ export default function Page() {
                   )}
                 </div>
               </div>
+
               <AttendanceCard />
             </div>
           </div>
@@ -168,8 +242,16 @@ export default function Page() {
 
 function StatusCard({ label, s }) {
   return (
-    <div className="item p-3 flex flex-col gap-2 md:gap-3">
-      <strong className="block text-base">{label}</strong>
+    <div
+      className="item p-3 flex flex-col gap-2 md:gap-3 rounded-xl border"
+      style={{
+        borderColor: "#e6d38a",
+        background: "#fffef8",
+      }}
+    >
+      <strong className="block text-base" style={{ color: "#a07800" }}>
+        {label}
+      </strong>
       <div className="grid grid-cols-4 gap-2 md:gap-3">
         <Chip k="완료" v={s.completed} />
         <Chip k="진행" v={s.inProgress} />
@@ -177,7 +259,14 @@ function StatusCard({ label, s }) {
         <Chip k="임박" v={s.near} />
       </div>
       <div className="pt-1">
-        <span className="badge text-sm">
+        <span
+          className="badge text-sm"
+          style={{
+            background: "#fff7d6",
+            color: "#8b7500",
+            borderColor: "#e6d38a",
+          }}
+        >
           완료 EXP {s.expSum.toLocaleString()}
         </span>
       </div>
@@ -187,7 +276,14 @@ function StatusCard({ label, s }) {
 
 function Chip({ k, v }) {
   return (
-    <div className="tag px-2 py-1 flex items-center justify-between w-full min-w-0 leading-tight">
+    <div
+      className="tag px-2 py-1 flex items-center justify-between w-full min-w-0 leading-tight rounded-md"
+      style={{
+        background: "#fffbe6",
+        borderColor: "#e6d38a",
+        color: "#8f7400",
+      }}
+    >
       <span className="truncate">{k}</span>
       <strong className="shrink-0">{v}</strong>
     </div>

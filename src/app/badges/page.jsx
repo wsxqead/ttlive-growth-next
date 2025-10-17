@@ -43,7 +43,7 @@ export default function Page() {
               style={{
                 borderColor: active ? "var(--line2)" : "transparent",
                 background: active ? "var(--brand-soft)" : "transparent",
-                color: active ? "#166e64" : "var(--txt)",
+                color: active ? "#e6d38a" : "var(--txt)",
               }}
             >
               {t.label}

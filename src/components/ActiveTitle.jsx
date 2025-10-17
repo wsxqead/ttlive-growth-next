@@ -13,7 +13,7 @@ export default function ActiveTitle({ title, onClick }) {
       style={{
         background: title.color || "var(--brand-soft)",
         borderColor: "var(--line2)",
-        color: "#166e64",
+        color: "#e6d38a",
       }}
       title="대표 칭호 변경"
     >
