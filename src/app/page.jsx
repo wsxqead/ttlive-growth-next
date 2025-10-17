@@ -4,7 +4,9 @@ import AttendanceCard from "@/components/AttendanceCard";
 import ProgressBar from "../components/ProgressBar";
 import ActiveTitle from "../components/ActiveTitle";
 import { demoActivity, demoProfile, demoQuests } from "../data/sample";
-
+// 상단 import
+import RadarHex from "../components/RadarHex";
+import { computeStatScores } from "../lib/stats";
 /* 진행 요약 계산 */
 function summarize(list = []) {
   let completed = 0,
@@ -121,6 +123,33 @@ export default function Page() {
       <div className="mt-5 md:mt-6">
         <AttendanceCard />
       </div>
+      // Page() 함수 안, AttendanceCard 아래 추가
+
+{/* 스탯 레이더 섹션 */}
+<div className="panel mt-5 md:mt-6">
+  <div className="space-y-3 md:space-y-4">
+    <h3>스탯 등급 요약</h3>
+    <RadarHex
+      values={computeStatScores({
+        weeklyBroadcasts: 4,
+        streakDays: 12,
+        sessionDonations: 85,
+        uniqueDonors: 14,
+        peakConcurrent: 420,
+        uniqueViewers: 3200,
+        cheers: 160,
+        fanTalks: 28,
+        votes: 6,
+        totalDonations: 12650,
+        subscribers: 890,
+        visitedHosts: 9,
+        categoryVariety: 6,
+      })}
+      overall={72}
+      title="내 활동 스탯"
+    />
+  </div>
+</div>
     </section>
   );
 }
