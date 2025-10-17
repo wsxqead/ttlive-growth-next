@@ -3,65 +3,183 @@
 import { useRef, useState } from "react";
 
 export default function PersonalSigCard({
-  value, // 초기 URL (기존 시그 이미지)
-  onChange, // 파일 또는 dataURL 전달
-  requiredSize = 200, // 프리뷰 기준 px
+  sigUrl = "https://static.flextv.co.kr/vipsignature/202510/92ae0915e4a0d4a2.webp",
+  profileUrl = "https://jcmkeuseuzeq6748407.cdn.ntruss.com/members/1234844/19g61mfx2rqy1.jpg?type=w&w=180&quality=90",
+  onChange,
+  requiredSize = 200,
   tagline = "로맨틱 진상 갑부 ✨",
-  percentile = 12, // 상위 12% → 숫자(0~100), 낮을수록 상위
+  percentile = 12,
+  repScore = 82,
 }) {
-  // 인지도 게이지: "상위 x%" → 게이지는 (100-x)%
-  const gauge = Math.max(0, Math.min(100, 100 - percentile));
+  const inputRef = useRef(null);
+  const [mode, setMode] = useState("sig"); // "sig" 또는 "profile"
+  const [sigPreview, setSigPreview] = useState(sigUrl);
+  const [profilePreview, setProfilePreview] = useState(profileUrl);
+
+  const preview = mode === "sig" ? sigPreview : profilePreview;
+
+  function openPicker() {
+    inputRef.current?.click();
+  }
+
+  function onFile(e) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    if (!file.type.startsWith("image/")) return;
+    if (file.size > 3 * 1024 * 1024) return;
+
+    const reader = new FileReader();
+    reader.onload = () => {
+      const url = String(reader.result);
+      if (mode === "sig") setSigPreview(url);
+      else setProfilePreview(url);
+      if (onChange) onChange(file, url, mode); // 현재 모드도 함께 전달
+    };
+    reader.readAsDataURL(file);
+  }
 
   return (
     <div className="panel space-y-3 md:space-y-4">
-      <h3>프로필</h3>
-
-      {/* 시그 + 평판지수 + 한줄평 (3열 구성) */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 items-center w-full">
-        {/* ① 시그 이미지 */}
+      <div className="flex items-center justify-between">
+        {/* 시그 / 프로필 토글 */}
         <div
-          className="border rounded-2xl overflow-hidden mx-auto"
+          className="rounded-full border p-1 flex gap-1"
+          style={{ borderColor: "var(--line2)", background: "var(--surface)" }}
+        >
+          {["sig", "profile"].map((m) => {
+            const active = mode === m;
+            return (
+              <button
+                key={m}
+                onClick={() => setMode(m)}
+                className="px-3 py-1.5 rounded-full text-sm font-medium transition-all"
+                style={{
+                  background: active ? "var(--brand-soft)" : "transparent",
+                  color: active ? "#166e64" : "var(--txt)",
+                  border: active
+                    ? "1px solid var(--line2)"
+                    : "1px solid transparent",
+                }}
+              >
+                {m === "sig" ? "시그" : "프로필"}
+              </button>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* 본문 3열: 이미지 / 평판 / 한줄평 */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 items-center w-full">
+        {/* ① 이미지 카드 */}
+        <div
+          className="relative rounded-2xl overflow-hidden mx-auto group" // ← group 추가
           style={{
             width: requiredSize,
             height: requiredSize,
-            borderColor: "var(--line)",
-            background: "var(--surface)",
+            boxShadow:
+              "0 10px 30px rgba(0,0,0,.08), inset 0 0 0 1px var(--line2), 0 0 0 6px rgba(67,209,191,.10)",
+            background:
+              "radial-gradient(120% 120% at 50% 0%, rgba(67,209,191,.10), transparent 55%)",
           }}
         >
-          {value ? (
-            <img
-              src={value}
-              alt="개인 시그"
-              className="w-full h-full"
-              style={{ objectFit: "cover" }}
-            />
-          ) : (
-            <div className="w-full h-full flex items-center justify-center text-muted">
-              {requiredSize}×{requiredSize} 이미지 업로드
-            </div>
-          )}
+          <img
+            src={preview}
+            alt={mode === "sig" ? "개인 시그" : "프로필 이미지"}
+            className="w-full h-full object-cover"
+          />
+
+          {/* 상단 라벨 */}
+          <div className="absolute top-2 left-2">
+            <span
+              className="px-2.5 py-1 rounded-full text-xs font-semibold opacity-0 pointer-events-none transition
+                 group-hover:opacity-100 group-hover:pointer-events-auto"
+              style={{
+                background: "rgba(255,255,255,.85)",
+                border: "1px solid var(--line2)",
+                backdropFilter: "blur(2px)",
+                color: "#166e64",
+              }}
+            >
+              {mode === "sig" ? "Signature" : "Profile"}
+            </span>
+          </div>
+
+          {/* 이미지 변경 버튼 */}
+          <button
+            onClick={openPicker}
+            className="absolute bottom-2 right-2 px-2.5 py-1.5 rounded-lg text-xs font-medium
+               opacity-0 pointer-events-none transition
+               group-hover:opacity-100 group-hover:pointer-events-auto"
+            style={{
+              background: "rgba(0,0,0,.4)",
+              color: "#fff",
+              border: "1px solid rgba(255,255,255,.3)",
+            }}
+          >
+            이미지 변경
+          </button>
+
+          <input
+            ref={inputRef}
+            type="file"
+            accept="image/*"
+            hidden
+            onChange={onFile}
+          />
         </div>
 
-        {/* ② 평판 지수 + 게이지 */}
-        <div className="flex flex-col gap-2 justify-center">
-          <div className="flex items-center justify-between mb-1">
-            <span className="text-sm text-muted">평판 지수</span>
-            <strong className="text-sm">상위 {percentile}%</strong>
+        {/* ② 평판 지수 */}
+        <div
+          className="rounded-2xl border p-4 md:p-5 flex items-center justify-between gap-4"
+          style={{ borderColor: "var(--line2)", background: "var(--surface)" }}
+        >
+          <div className="min-w-0">
+            <div className="text-sm text-muted">평판 지수</div>
+            <div className="mt-1 flex items-end gap-2">
+              <span
+                className="leading-none font-extrabold"
+                style={{ fontSize: 40, color: "#166e64" }}
+              >
+                {Math.round(repScore)}
+              </span>
+              <span className="text-xs text-muted mb-[3px]">/ 100</span>
+            </div>
           </div>
-          <div className="bar">
-            <div
-              className="fill"
-              style={{
-                width: `${Math.max(0, Math.min(100, 100 - percentile))}%`,
-              }}
-            />
+
+          <div
+            className="shrink-0 px-3 py-1.5 rounded-full font-semibold"
+            style={{
+              background: "var(--brand-soft)",
+              color: "#166e64",
+              border: "1px solid var(--line2)",
+            }}
+          >
+            상위 {percentile}%
           </div>
         </div>
 
         {/* ③ 한줄 평 */}
-        <div className="flex flex-col items-center justify-center">
-          <span className="text-sm text-muted mb-1">한줄 평</span>
-          <span className="badge text-center max-w-[240px]">{tagline}</span>
+        <div
+          className="rounded-2xl border p-5 flex flex-col items-center justify-center text-center"
+          style={{
+            borderColor: "var(--line2)",
+            background: "linear-gradient(135deg, #e8fefb 0%, #f9fffd 100%)",
+            boxShadow: "0 4px 12px rgba(0,0,0,0.05)",
+          }}
+        >
+          <div className="text-sm text-muted mb-2">한줄 평</div>
+          <div
+            className="font-bold leading-snug"
+            style={{
+              fontSize: 22,
+              color: "#0d6157",
+              lineHeight: 1.3,
+              wordBreak: "keep-all",
+            }}
+            title={tagline}
+          >
+            {tagline}
+          </div>
         </div>
       </div>
     </div>
