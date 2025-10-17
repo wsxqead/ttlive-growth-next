@@ -51,7 +51,7 @@ export default function RadarHex({
   const overallGrade = gradeLetter(overall ?? 0);
 
   return (
-    <div className="panel">
+    <div className="panel mt-5 md:mt-6 space-y-3 md:space-y-4">
       <div className="flex items-center justify-between mb-2">
         <h3>{title}</h3>
         <span className="badge">{overallGrade} · {Math.round(overall ?? 0)}</span>
