@@ -14,8 +14,11 @@ export default function LayoutShell({ children }) {
         </div>
       </header>
 
-      <main className="grid gap-4 p-4 md:grid-cols-[280px_1fr]">
-        <Nav />
+      <main className="flex flex-col gap-4 p-4">
+        <nav className="border-b border-line pb-2">
+          <Nav />
+        </nav>
+
         <motion.section
           className="grid gap-4"
           initial={{ opacity: 0, y: 6 }}
