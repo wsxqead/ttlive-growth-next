@@ -559,7 +559,7 @@ export const demoProfile = {
   titleActive: {
     // 대표 칭호
     name: "꾸준한 스트리머",
-    color: "#8EE6C7", // 배지 배경색(파스텔 민트)
+    color: "rgba(255,221,77,.4)", // , // 배지 배경색(파스텔 민트)
     emoji: "🌟", // 선택: 칭호 아이콘
   },
 };

@@ -58,8 +58,8 @@ export default function Page() {
     <section
       className="panel"
       style={{
-        background: "linear-gradient(180deg, #fffdf6 0%, #fffbe6 100%)",
-        borderColor: "#e6d38a",
+        background: "#fff",
+        borderColor: "#fff",
       }}
     >
       {/* 헤더 */}

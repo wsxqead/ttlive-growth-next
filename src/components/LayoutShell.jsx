@@ -42,7 +42,7 @@ export default function LayoutShell({ children }) {
       <main
         className="flex flex-col gap-4 p-4"
         style={{
-          background: "linear-gradient(180deg, #fffdf6 0%, #fffbe6 100%)",
+          background: "#fff",
         }}
       >
         {/* 네비게이션 */}
