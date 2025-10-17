@@ -4,8 +4,8 @@ import AttendanceCard from "@/components/AttendanceCard";
 import ProgressBar from "../components/ProgressBar";
 import ActiveTitle from "../components/ActiveTitle";
 import { demoActivity, demoProfile, demoQuests } from "../data/sample";
-// 상단 import
 import RadarHex from "../components/RadarHex";
+import PersonalSigCard from "../components/PersonalSigCard";
 import { computeStatScores } from "../../lib/stats";
 /* 진행 요약 계산 */
 function summarize(list = []) {
@@ -68,6 +68,16 @@ export default function Page() {
       </div>
       {/* 패널들 사이 간격 넉넉히 */}
       <div className="grid grid-cols-1 gap-5 md:gap-6">
+        <PersonalSigCard
+          value="https://static.flextv.co.kr/vipsignature/202510/92ae0915e4a0d4a2.webp" // 있으면 초기값, 없으면 "" (optional)
+          onChange={(file, dataUrl) => {
+            // TODO: 업로드 API 연동
+            // 1) dataUrl을 미리보기로 쓰고
+            // 2) file을 서버에 업로드 → 저장된 URL을 사용자 프로필에 기록
+            console.log("personal-sig change:", { file, dataUrl });
+            alert("시그 이미지가 변경되었습니다. (API 연동 예정)");
+          }}
+        />
         {/* 스탯 레이더 섹션 */}
         <RadarHex
           values={computeStatScores({
