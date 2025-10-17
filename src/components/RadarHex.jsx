@@ -22,13 +22,14 @@ export function gradeLetter(score) {
 }
 
 export default function RadarHex({
-  values,           // {consistency:70, influence:55, ...} (0~100)
-  overall,          // 0~100
+  values, // {consistency:70, influence:55, ...} (0~100)
+  overall, // 0~100
   title = "스탯 요약",
 }) {
-  const size = 300;         // SVG 사이즈
-  const rMax = 110;         // 반지름
-  const cx = size / 2, cy = size / 2;
+  const size = 300; // SVG 사이즈
+  const rMax = 110; // 반지름
+  const cx = size / 2,
+    cy = size / 2;
   const toRad = (deg) => (deg * Math.PI) / 180;
   const angles = AXES.map((_, i) => -90 + (360 / AXES.length) * i);
 
@@ -51,17 +52,12 @@ export default function RadarHex({
   const overallGrade = gradeLetter(overall ?? 0);
 
   return (
-    <div className="panel mt-5 md:mt-6 space-y-3 md:space-y-4">
-      <div className="flex items-center justify-between mb-2">
-        <h3>{title}</h3>
-        <span className="badge">{overallGrade} · {Math.round(overall ?? 0)}</span>
-      </div>
-
-      <div className="grid gap-3 md:grid-cols-2 items-center">
-        {/* Chart */}
+    <div className="subpanel  space-y-3 md:space-y-4">
+      {/* 본문 레이아웃: [차트] [토탈카드] [항목리스트] */}
+      <div className="grid gap-1.5 md:gap-2 w-full max-w-[320px] xl:max-w-[380px]">
+        {/* 1) Chart */}
         <div className="flex items-center justify-center">
           <svg width={size} height={size}>
-            {/* guide rings */}
             {[0.25, 0.5, 0.75, 1].map((t) => (
               <polygon
                 key={t}
@@ -71,8 +67,6 @@ export default function RadarHex({
                 strokeDasharray="4 4"
               />
             ))}
-
-            {/* axes */}
             {AXES.map((a, i) => {
               const x = cx + rMax * Math.cos(toRad(angles[i]));
               const y = cy + rMax * Math.sin(toRad(angles[i]));
@@ -100,18 +94,38 @@ export default function RadarHex({
                 </g>
               );
             })}
-
-            {/* filled area */}
             <polygon
               points={polyPoints}
-              fill="rgba(67,209,191, .28)"     // 파스텔 민트
-              stroke="rgba(67,209,191, .75)"
+              fill="rgba(67,209,191,.28)"
+              stroke="rgba(67,209,191,.75)"
               strokeWidth="2"
             />
           </svg>
         </div>
 
-        {/* legend */}
+        {/* 2) 가운데: 큰 토탈 카드 */}
+        <div className="h-full">
+          <div
+            className="rounded-2xl border p-4 h-full flex flex-col items-center justify-center text-center"
+            style={{
+              borderColor: "var(--line2)",
+              background: "var(--brand-soft)",
+            }}
+          >
+            <div className="text-xs text-muted mb-1">총합 등급</div>
+            <div
+              className="leading-none"
+              style={{ fontSize: 48, fontWeight: 800, color: "#166e64" }}
+            >
+              {overallGrade}
+            </div>
+            <div className="mt-1 badge" style={{ fontSize: 14 }}>
+              {Math.round(overall ?? 0)}
+            </div>
+          </div>
+        </div>
+
+        {/* 3) 오른쪽: 개별 지수 리스트 */}
         <div className="grid gap-2">
           {AXES.map((a) => {
             const v = Math.round(values[a.key] ?? 0);
@@ -120,7 +134,9 @@ export default function RadarHex({
                 <div className="flex items-center gap-2">
                   <strong>{a.label}</strong>
                 </div>
-                <span className="badge">{gradeLetter(v)} · {v}</span>
+                <span className="badge">
+                  {gradeLetter(v)} · {v}
+                </span>
               </div>
             );
           })}

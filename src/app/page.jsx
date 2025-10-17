@@ -78,78 +78,87 @@ export default function Page() {
             alert("시그 이미지가 변경되었습니다. (API 연동 예정)");
           }}
         />
-        {/* 스탯 레이더 섹션 */}
-        <RadarHex
-          values={computeStatScores({
-            weeklyBroadcasts: 4,
-            streakDays: 12,
-            sessionDonations: 85,
-            uniqueDonors: 14,
-            peakConcurrent: 420,
-            uniqueViewers: 3200,
-            cheers: 160,
-            fanTalks: 28,
-            votes: 6,
-            totalDonations: 12650,
-            subscribers: 890,
-            visitedHosts: 9,
-            categoryVariety: 6,
-          })}
-          overall={72}
-          title="내 활동 스탯"
-        />
-        {/* EXP 진행도 */}
-        <div className="panel">
-          <div className="space-y-3 md:space-y-4">
-            <h3>Activity EXP 진행도</h3>
-            <div className="item">
-              <div className="flex items-center gap-2">
-                <span className="badge">Grade {demoActivity.grade}</span>
-              </div>
-              <span className="tag">
-                {demoActivity.exp.toLocaleString()} /{" "}
-                {demoActivity.nextExp.toLocaleString()} EXP
-              </span>
+        <div>
+          <div className="grid md:grid-cols-[380px_1fr] gap-6 items-start">
+            <div>
+              {/* 스탯 레이더 섹션 */}
+              <RadarHex
+                values={computeStatScores({
+                  weeklyBroadcasts: 4,
+                  streakDays: 12,
+                  sessionDonations: 85,
+                  uniqueDonors: 14,
+                  peakConcurrent: 420,
+                  uniqueViewers: 3200,
+                  cheers: 160,
+                  fanTalks: 28,
+                  votes: 6,
+                  totalDonations: 12650,
+                  subscribers: 890,
+                  visitedHosts: 9,
+                  categoryVariety: 6,
+                })}
+                overall={72}
+                title="내 활동 스탯"
+              />
             </div>
-            <ProgressBar value={pct} />
-          </div>
-        </div>
-
-        {/* 퀘스트 요약 */}
-        <div className="panel">
-          <div className="space-y-3 md:space-y-4">
-            <h3>퀘스트 요약</h3>
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-3 md:gap-4">
-              <StatusCard label="오늘(일일)" s={daily} />
-              <StatusCard label="이번주(주간)" s={weekly} />
-              <StatusCard label="이번달(월간)" s={monthly} />
-            </div>
-          </div>
-        </div>
-      </div>
-      {/* 임박 섹션 */}
-      <div className="panel mt-5 md:mt-6">
-        <div className="space-y-3 md:space-y-4">
-          <h3>지금 완료 가능(임박)</h3>
-          {topNear.length === 0 ? (
-            <div className="text-muted">임박한 퀘스트가 없습니다.</div>
-          ) : (
-            <div className="grid gap-2 md:gap-3">
-              {topNear.map((q) => (
-                <div key={q.id} className="item">
-                  <div className="flex items-center gap-2 flex-wrap min-w-0">
-                    <strong className="truncate">{q.name}</strong>
-                    <span className="tag shrink-0">{q.pct}%</span>
+            <div className="flex flex-col flex-1 gap-5 md:gap-6 w-full">
+              {/* EXP 진행도 */}
+              <div className="panel">
+                <div className="space-y-3 md:space-y-4">
+                  <h3>Activity EXP 진행도</h3>
+                  <div className="item">
+                    <div className="flex items-center gap-2">
+                      <span className="badge">Grade {demoActivity.grade}</span>
+                    </div>
+                    <span className="tag">
+                      {demoActivity.exp.toLocaleString()} /{" "}
+                      {demoActivity.nextExp.toLocaleString()} EXP
+                    </span>
                   </div>
-                  <span className="badge shrink-0">+{q.rewardExp} EXP</span>
+                  <ProgressBar value={pct} />
                 </div>
-              ))}
+              </div>
+
+              {/* 퀘스트 요약 */}
+              <div className="panel">
+                <div className="space-y-3 md:space-y-4">
+                  <h3>퀘스트 요약</h3>
+                  <div className="grid grid-cols-1 lg:grid-cols-3 gap-3 md:gap-4">
+                    <StatusCard label="오늘(일일)" s={daily} />
+                    <StatusCard label="이번주(주간)" s={weekly} />
+                    <StatusCard label="이번달(월간)" s={monthly} />
+                  </div>
+                </div>
+              </div>
+
+              {/* 임박 섹션 */}
+              <div className="panel">
+                <div className="space-y-3 md:space-y-4">
+                  <h3>지금 완료 가능(임박)</h3>
+                  {topNear.length === 0 ? (
+                    <div className="text-muted">임박한 퀘스트가 없습니다.</div>
+                  ) : (
+                    <div className="grid gap-2 md:gap-3">
+                      {topNear.map((q) => (
+                        <div key={q.id} className="item">
+                          <div className="flex items-center gap-2 flex-wrap min-w-0">
+                            <strong className="truncate">{q.name}</strong>
+                            <span className="tag shrink-0">{q.pct}%</span>
+                          </div>
+                          <span className="badge shrink-0">
+                            +{q.rewardExp} EXP
+                          </span>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              </div>
+              <AttendanceCard />
             </div>
-          )}
+          </div>
         </div>
-      </div>
-      <div className="mt-5 md:mt-6">
-        <AttendanceCard />
       </div>
     </section>
   );
